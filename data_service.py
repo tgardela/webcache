@@ -1,30 +1,34 @@
 #!flask/bin/python
-import os
-import sys
-from multiprocessing.pool import ThreadPool
 
-from requests.exceptions import ProxyError, ConnectTimeout, SSLError, ConnectionError, ChunkedEncodingError, ReadTimeout
-
-import json
-from datetime import datetime, timedelta
-import pymongo
-import traceback
-import pickle
 import base64
-from proxyhandling import DBProxyHandler
-from captcha_execution import CaptchaError
-import multiprocessing
-from bs4 import BeautifulSoup
 import bz2
-from pdfunctions import timeDiffToNow, SkipURL
-from webcacheclient import dbNormalizeURL, isValidURL
-import requests
-
-from typing import Union
+from datetime import datetime, timedelta
+import json
+import multiprocessing
 import os
+import pickle
 import re
+import traceback
+from typing import Union
 
+from bs4 import BeautifulSoup
 from flask import Flask, jsonify, abort, make_response, request
+import pymongo
+import requests
+from requests.exceptions import (
+    ProxyError,
+    ConnectTimeout,
+    SSLError,
+    ConnectionError,
+    ChunkedEncodingError,
+    ReadTimeout
+)
+
+from captcha_execution import CaptchaError
+from pdfunctions import timeDiffToNow, SkipURL
+from proxyhandling import DBProxyHandler
+from webcacheclient import dbNormalizeURL, isValidURL
+
 
 app = Flask(__name__)
 
@@ -118,7 +122,7 @@ def getData(urlList: list, method: str, maxAgeDays: int, category, output="xml")
 def processURLChunk(chunk, urlData, method, output, category, maxAgeDays):
     print("process started for %s URL's in category %s" % (len(chunk), category))
     if len(chunk) < 1: return
-    with ThreadPool(min(100, len(chunk))) as thread_pool:
+    with multiprocessing.pool.ThreadPool(min(100, len(chunk))) as thread_pool:
         thread_pool.starmap(tryNTimesToGetPage,
                             [(urlKey, urlData[urlKey]["urlTuple"], method, output, category, maxAgeDays) for urlKey in
                              chunk])
@@ -162,11 +166,16 @@ def tryNTimesToGetPage(urlKey: str, urlTuple: tuple, method: str, output: str, c
             ph.feedback(proxy, 1)
             updateDBEntry(result, urlTuple)
             return
-        except (ProxyError, ConnectTimeout, SSLError, ConnectionError, ReadTimeout, ChunkedEncodingError,
+        except (ProxyError,
+                ConnectTimeout,
+                SSLError,
+                ConnectionError,
+                ReadTimeout,
+                ChunkedEncodingError,
                 CaptchaError) as e:
             ph.feedback(proxy, -1)
             if not multiprocessed:
-                with ThreadPool(5) as pool:
+                with multiprocessing.pool.ThreadPool(5) as pool:
                     new_queries = []
                     for i in range(1, 6):
                         url_counter[urlKey] = url_counter[urlKey] + 1

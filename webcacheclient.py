@@ -3,7 +3,6 @@ import bz2
 import json
 import os
 import pickle
-from os.path import expanduser
 
 import furl
 import requests
@@ -13,7 +12,7 @@ class WebCacheClient: # add constructor to set webcache location programmaticall
     WEBCACHE_LOCATION = "10.5.133.201:9011" 
 
     def __init__(self):
-        expectedEnvLocation = "%s/.labscape.env" % expanduser("~") #it's probably better to specify the webcache IP in the file rather than the env name
+        expectedEnvLocation = "%s/.labscape.env" % os.path.expanduser("~") #it's probably better to specify the webcache IP in the file rather than the env name
         if os.path.exists(expectedEnvLocation):
             with open(expectedEnvLocation, "r") as fi:
                 content = fi.read()
