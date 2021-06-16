@@ -1,0 +1,2 @@
+1. added .gitignore file
+2. created this file in order to help with marking
