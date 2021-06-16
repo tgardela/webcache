@@ -12,7 +12,7 @@ import traceback
 import pickle
 import base64
 from proxyhandling import DBProxyHandler
-from captcha_exception import CaptchaError
+from captcha_execution import CaptchaError
 import multiprocessing
 from bs4 import BeautifulSoup
 import bz2
