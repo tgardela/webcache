@@ -81,6 +81,8 @@ ENV/
 env.bak/
 venv.bak/
 
-
 # Pycharm project
 .idea/
+
+# Windows env set for Flask
+set
