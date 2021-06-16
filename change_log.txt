@@ -5,3 +5,4 @@
 5. import cleanup in all the project's files and same basic code cleanup connected with it
 6. renaming files holding model classes and moving them into models folder
 7. moving exception objects into one class
+8. moving standalone functions into their own file

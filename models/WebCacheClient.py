@@ -4,8 +4,9 @@ import json
 import os
 import pickle
 
-import furl
 import requests
+
+from helpers import dbNormalizeURL, isValidURL
 
 
 class WebCacheClient: # add constructor to set webcache location programmatically. fall back to config if no explicit location provided
@@ -101,30 +102,3 @@ class WebCacheClient: # add constructor to set webcache location programmaticall
 
             return {urlItem: urlKeys.get(dbNormalizeURL(urlItem), {"url": urlItem, "content": None, "error": True})
                     for urlItem in urlList}
-
-
-def isValidURL(url):
-    return type(url) == str and len(url.strip()) > 0 and url.startswith("http")
-
-
-def dbNormalizeURL(urlItem):
-    theUrl, theData = (urlItem, {}) if type(urlItem) is str else (urlItem[0], json.loads(urlItem[1]))
-    try:
-        lowerLinkFurl = furl.furl(
-            theUrl.lower().strip().replace("https://", "http://"))  # consider http and https as EQUAL for the key
-        lowerLinkFurl.path.normalize()
-        lowerLinkFurl.query.params = sorted(
-            [(par, lowerLinkFurl.query.params[par]) for par in lowerLinkFurl.query.params],
-            key=lambda item: item[0])
-        lowerLinkFurl.path = "%s/" % lowerLinkFurl.path if not str(lowerLinkFurl.path).endswith(
-            "/") else lowerLinkFurl.path
-        lowerLink = lowerLinkFurl.url
-
-        if theData:
-            dataJSON = json.dumps(theData, sort_keys=True).lower()
-            lowerLink = f"{lowerLink}_{dataJSON}"
-
-        return lowerLink
-    except:
-        print("COULD NOT DB NORM URL %s" % theUrl)
-        return None
