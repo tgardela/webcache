@@ -26,8 +26,8 @@ from requests.exceptions import (
 
 from captcha_execution import CaptchaError
 from pdfunctions import timeDiffToNow, SkipURL
-from proxyhandling import DBProxyHandler
-from webcacheclient import dbNormalizeURL, isValidURL
+from models.DBProxyHandler import DBProxyHandler
+from models.WebCacheClient import dbNormalizeURL, isValidURL
 
 
 app = Flask(__name__)

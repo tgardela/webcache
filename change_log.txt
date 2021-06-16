@@ -3,3 +3,4 @@
 3. added requirements.txt file in order to make the project virtualenv friendly
 4. added __init__.py file to be able to run the project
 5. import cleanup in all the project's files and same basic code cleanup connected with it
+6. renaming files holding model classes and moving them into models folder
