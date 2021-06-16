@@ -24,8 +24,8 @@ from requests.exceptions import (
     ReadTimeout
 )
 
-from captcha_execution import CaptchaError
-from pdfunctions import timeDiffToNow, SkipURL
+from exceptions import CaptchaError, SkipURL
+from pdfunctions import timeDiffToNow
 from models.DBProxyHandler import DBProxyHandler
 from models.WebCacheClient import dbNormalizeURL, isValidURL
 

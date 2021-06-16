@@ -1,7 +1,5 @@
 import datetime
 
-class SkipURL(Exception):
-    pass
 
 def timeDiffToNow(previousTime):
     diff = (datetime.datetime.now() - previousTime)
