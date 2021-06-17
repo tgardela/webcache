@@ -1,8 +1,5 @@
-import requests
-import re, bs4, math
-from joblib import Parallel, delayed
 import random
-from pymongo import InsertOne, DeleteOne, ReplaceOne
+
 import pymongo
 
 
@@ -16,7 +13,7 @@ class DBProxyHandler:
     def upload(self, proxyList):
         cleanedList = [item.replace("\n", "") for item in proxyList]
         self.db.proxies.bulk_write(
-            [ReplaceOne({"address": item}, {"address": item, "successful_job_completion": 0}, upsert=True) for item in
+            [pymongo.ReplaceOne({"address": item}, {"address": item, "successful_job_completion": 0}, upsert=True) for item in
              cleanedList],
             ordered=False)
 

@@ -3,3 +3,7 @@ class CaptchaError(Exception):
         super(CaptchaError, self).__init__(message)
 
         self.errors = errors
+
+
+class SkipURL(Exception):
+    pass

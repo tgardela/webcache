@@ -1,5 +1,6 @@
 import json
-from webcacheclient import WebCacheClient
+
+from models.WebCacheClient import WebCacheClient
 
 
 def play_get_request():
@@ -12,7 +13,6 @@ def play_get_request():
 
 
 def play_get_request():
-    import sys
     client = WebCacheClient()
 
     urlList = [f"https://nominatim.openstreetmap.org/search/Bank,{zipcode},Switzerland?osm_type=N&format=json"
